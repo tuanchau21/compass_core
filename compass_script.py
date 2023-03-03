@@ -196,16 +196,17 @@ def print_menu(token,myorders_list):
                         for singleMeal in mealGroup['AdditionList']:
                             print('\t> ' + singleMeal['Name'])
                             print('\t\t> ' + ','.join(meal_attr_dict[singleMeal['ID']]))
-                            meal_total_pref_point[singleMeal['MealDayAdditionID']] = calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']])
-                            print('\t\t> preference point =' + str(calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']])))
+                            fref_point = calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']])
+                            meal_total_pref_point[singleMeal['MealDayAdditionID']] = fref_point
+                            print('\t\t> preference point =' + str(fref_point))
             if status == '':
                 best_point = -1000000
-                bestMealId = ''
+                best_meal_id = ''
                 for meal_id, point in meal_total_pref_point.items():
                     if point > best_point:
                         best_point = point
-                        bestMealId = meal_id
-                save_order(token, meal['MealDayID'],  meal_id, dessert_id, pickup_time_id[mealData['Day']])
+                        best_meal_id = meal_id
+                save_order(token, meal['MealDayID'],  best_meal_id, dessert_id, pickup_time_id[mealData['Day']])
 
 if __name__ == '__main__':
     myorders_list = []
