@@ -153,7 +153,6 @@ def save_order(token, meal_day_id, additional_meal_id, dessert_id, pickup_time_i
         },
         "LanguageSymbol": "EN"
     }
-    print(json.dumps(data))
     response = requests.post(url, json=data, headers=headers)
     response.raise_for_status()
     return
@@ -185,7 +184,7 @@ def print_menu(token,myorders_list):
             status += '[LATE]'
 
         print( date_name + ' ('+ date_key + ')' + status)
-        if 'MealList' in mealData['MealList']:
+        if 'MealList' in mealData:
             for meal in mealData['MealList']:
                 for mealGroup in meal['MealAdditionGroupList']:
                     if "dessert" in mealGroup['Name']:
@@ -198,7 +197,7 @@ def print_menu(token,myorders_list):
                             print('\t> ' + singleMeal['Name'])
                             print('\t\t> ' + ','.join(meal_attr_dict[singleMeal['ID']]))
                             meal_total_pref_point[singleMeal['MealDayAdditionID']] = calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']])
-                            print('\t\t> preference point =' + calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']]))
+                            print('\t\t> preference point =' + str(calculatePreferencePoint(preferences,singleMeal['Name'], meal_attr_dict[singleMeal['ID']])))
             if status == '':
                 best_point = -1000000
                 bestMealId = ''
@@ -206,7 +205,7 @@ def print_menu(token,myorders_list):
                     if point > best_point:
                         best_point = point
                         bestMealId = meal_id
-                save_order(token, meal['MealDayID'],  meal_id, dessert_id, pickup_time_id[mealData['Day'] ])
+                save_order(token, meal['MealDayID'],  meal_id, dessert_id, pickup_time_id[mealData['Day']])
 
 if __name__ == '__main__':
     myorders_list = []
